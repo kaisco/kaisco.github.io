@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Go 快速入门（五）- 并发利器 | Kaisco L</title>
+    <meta name="description" content="Rome is not built in a day.">
+    <link rel="icon" href="/favicon.ico">
+    
+    <link rel="preload" href="/assets/css/0.styles.0ad23782.css" as="style"><link rel="preload" href="/assets/js/app.eb766794.js" as="script"><link rel="preload" href="/assets/js/2.12a3889d.js" as="script"><link rel="preload" href="/assets/js/12.15fba913.js" as="script"><link rel="prefetch" href="/assets/js/10.3e3aa79e.js"><link rel="prefetch" href="/assets/js/11.e54a9576.js"><link rel="prefetch" href="/assets/js/13.e62a5e25.js"><link rel="prefetch" href="/assets/js/14.7f590dff.js"><link rel="prefetch" href="/assets/js/15.da3f9779.js"><link rel="prefetch" href="/assets/js/16.62dc4f1a.js"><link rel="prefetch" href="/assets/js/3.4d6c77a2.js"><link rel="prefetch" href="/assets/js/4.9fb4c202.js"><link rel="prefetch" href="/assets/js/5.a9f8dc60.js"><link rel="prefetch" href="/assets/js/6.acbbc17d.js"><link rel="prefetch" href="/assets/js/7.bc0929d5.js"><link rel="prefetch" href="/assets/js/8.61479e54.js"><link rel="prefetch" href="/assets/js/9.f2d3f225.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.0ad23782.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">Kaisco L</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">Home</a></div><div class="nav-item"><a href="/contents.html" class="nav-link">Contents</a></div><div class="nav-item"><a href="https://github.com/kaisco" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  GitHub
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">Home</a></div><div class="nav-item"><a href="/contents.html" class="nav-link">Contents</a></div><div class="nav-item"><a href="https://github.com/kaisco" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  GitHub
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>Go 快速入门（五）- 并发利器</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/learn-golang/05.html#本章学习目标" class="sidebar-link">本章学习目标</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/learn-golang/05.html#channel（通道）" class="sidebar-link">channel（通道）</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/learn-golang/05.html#_1、channel（无缓冲通道）" class="sidebar-link">1、channel（无缓冲通道）</a></li><li class="sidebar-sub-header"><a href="/learn-golang/05.html#_2、buffered-channels（缓冲通道）" class="sidebar-link">2、Buffered Channels（缓冲通道）</a></li><li class="sidebar-sub-header"><a href="/learn-golang/05.html#_3、通道遍历与关闭" class="sidebar-link">3、通道遍历与关闭</a></li><li class="sidebar-sub-header"><a href="/learn-golang/05.html#_4、通道方向" class="sidebar-link">4、通道方向</a></li><li class="sidebar-sub-header"><a href="/learn-golang/05.html#_5、-select" class="sidebar-link">5、 select</a></li><li class="sidebar-sub-header"><a href="/learn-golang/05.html#_6、-超时" class="sidebar-link">6、 超时</a></li></ul></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="go-快速入门（五）-并发利器"><a href="#go-快速入门（五）-并发利器" class="header-anchor">#</a> Go 快速入门（五）- 并发利器</h1> <h2 id="本章学习目标"><a href="#本章学习目标" class="header-anchor">#</a> 本章学习目标</h2> <p>前面掌握过了一些基础知识，我们也动手写过了一个web爬虫程序。本章节我们再来学习一下<code>go</code>语言关于并发的另一重要特性<code>channel</code>。</p> <h2 id="channel（通道）"><a href="#channel（通道）" class="header-anchor">#</a> channel（通道）</h2> <p>我们已经了解过了<code>go</code>语言是通过协程来实现并发。同时，我们也知道协程是独立执行的，它们之间没有通信。前面章节我们也提到过：不通过共享来通信，而要通过通信来共享。<code>go</code>语言如何通过通信来共享呢？</p> <p><code>go</code>语言有一种特殊的类型<code>channel</code>，提供了一个很好的通信机制。<code>channel</code>就像一个可以用于发送类型化数据的管道（可以比作 Unix shells 中的双向管道），负责协程之间的通信。</p> <h3 id="_1、channel（无缓冲通道）"><a href="#_1、channel（无缓冲通道）" class="header-anchor">#</a> 1、channel（无缓冲通道）</h3> <p><code>channel</code>声明方式：</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">var</span> identifier <span class="token keyword">chan</span> datatype
+</code></pre></div><p>未初始化的<code>channel</code>的值是nil。<code>channel</code>也是引用类型，所以我们使用 <code>make()</code>函数来给它分配内存。</p> <p><code>channel</code>只能传输一种类型的数据，比如 <code>chan int</code> 或者 <code>chan string</code>，所有的类型都可以用于通道，空接口 <code>interface{}</code> 也可以。甚至可以（有时非常有用）创建通道的通道。</p> <p><code>channel</code>通过操作符<code>&lt;-</code>来接收和发送数据：</p> <div class="language-go extra-class"><pre class="language-go"><code>ch <span class="token operator">&lt;-</span> v    <span class="token comment">// 发送v到channel ch.</span>
+v <span class="token operator">:=</span> <span class="token operator">&lt;-</span>ch  <span class="token comment">// 从ch中接收数据，并赋值给v</span>
+</code></pre></div><p>操作符<code>&lt;-</code>直观的标示了数据的传输：信息按照箭头的方向流动。</p> <ul><li><p>向<code>channel</code>发送数据</p> <div class="language-go extra-class"><pre class="language-go"><code>ch <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">chan</span> <span class="token builtin">int</span><span class="token punctuation">)</span>
+ch <span class="token operator">&lt;-</span> <span class="token number">4</span>		<span class="token comment">// 将整形4发送到通道</span>
+</code></pre></div></li> <li><p>从<code>channel</code>接收数据</p> <div class="language-go extra-class"><pre class="language-go"><code>x <span class="token operator">:=</span> <span class="token operator">&lt;-</span> ch 	<span class="token comment">// 从通道中接收数据并存储到x变量</span>
+</code></pre></div></li></ul> <p>默认情况下，<code>channel</code>接收和发送数据都是阻塞的，除非另一端已经准备好，这样就使得<code>goroutines</code>同步变的更加的简单，而不需要显式的锁。所谓阻塞，也就是如果读取（value := &lt;-ch）它将会被阻塞，直到有数据接收。其次，任何发送（ch&lt;-4）将会被阻塞，直到数据被读出。无缓冲channel是在多个<code>goroutine</code>之间同步很棒的工具。</p> <p>我们把这些应用到我们的例子中来：</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token string">&quot;fmt&quot;</span>
+
+<span class="token keyword">func</span> <span class="token function">sum</span><span class="token punctuation">(</span>a <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">,</span> c <span class="token keyword">chan</span> <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    total <span class="token operator">:=</span> <span class="token number">0</span>
+    <span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> v <span class="token operator">:=</span> <span class="token keyword">range</span> a <span class="token punctuation">{</span>
+        total <span class="token operator">+=</span> v
+    <span class="token punctuation">}</span>
+    c <span class="token operator">&lt;-</span> total  <span class="token comment">// send total to c（阻塞：等待数据被读出）</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    a <span class="token operator">:=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">{</span><span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">9</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">}</span>
+
+    c <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">chan</span> <span class="token builtin">int</span><span class="token punctuation">)</span>
+    <span class="token keyword">go</span> <span class="token function">sum</span><span class="token punctuation">(</span>a<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token function">len</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> c<span class="token punctuation">)</span>
+    <span class="token keyword">go</span> <span class="token function">sum</span><span class="token punctuation">(</span>a<span class="token punctuation">[</span><span class="token function">len</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">2</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">,</span> c<span class="token punctuation">)</span>
+    x<span class="token punctuation">,</span> y <span class="token operator">:=</span> <span class="token operator">&lt;-</span>c<span class="token punctuation">,</span> <span class="token operator">&lt;-</span>c  <span class="token comment">// receive from c（阻塞：等待数据写入）</span>
+
+    fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> x <span class="token operator">+</span> y<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span class="token comment">// 结果：</span>
+<span class="token comment">// go run main.go</span>
+<span class="token comment">//-5 17 12</span>
+</code></pre></div><h3 id="_2、buffered-channels（缓冲通道）"><a href="#_2、buffered-channels（缓冲通道）" class="header-anchor">#</a> 2、Buffered Channels（缓冲通道）</h3> <p>一个无缓冲通道只能包含 1 个元素，有时显得很局限。不过<code>go</code>也允许指定<code>channel</code>的缓冲大小。很简单，就是<code>channel</code>可以存储多个元素。</p> <p><code>ch:=make(chan bool, 4)</code>创建了可以存储4个元素的布尔型<code>channel</code>。在这个<code>channel</code>中，前4个元素可以无阻塞的写入。当写入第5个元素时，代码将会阻塞，直到其他<code>goroutine</code>从<code>channel</code> 中读取一些元素，腾出空间。</p> <p>我们看一下下面这个例子，大家可以在自己本机测试一下，修改相应的value值。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token string">&quot;fmt&quot;</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    c <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">chan</span> <span class="token builtin">int</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token comment">// 修改2为1就报错，修改2为3可以正常运行</span>
+    c <span class="token operator">&lt;-</span> <span class="token number">1</span>
+    c <span class="token operator">&lt;-</span> <span class="token number">2</span>
+    fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token operator">&lt;-</span>c<span class="token punctuation">)</span>
+    fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token operator">&lt;-</span>c<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span class="token comment">// 修改为1报如下的错误:</span>
+<span class="token comment">// fatal error: all goroutines are asleep - deadlock!</span>
+</code></pre></div><h3 id="_3、通道遍历与关闭"><a href="#_3、通道遍历与关闭" class="header-anchor">#</a> 3、通道遍历与关闭</h3> <p>上面这个例子中，我们需要读取两次c，这样不是很方便，<code>go</code>考虑到了这一点，所以也可以通过range，像操作slice或者map一样操作缓存类型的channel。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">for</span> v <span class="token operator">:=</span> <span class="token keyword">range</span> ch <span class="token punctuation">{</span>
+	fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;The value is %v\n&quot;</span><span class="token punctuation">,</span> v<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>上面的代码指定通道中读取数据直到通道关闭，才继续执行下边的代码。很明显，另外一个协程必须写入 <code>ch</code>（不然代码就阻塞在 for 循环了），而且必须在写入完成后才关闭。</p> <p>我们来看一下如何使用<code>channel</code>实现一个<code>fibonacci</code> 函数：</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+    <span class="token string">&quot;fmt&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">fibonacci</span><span class="token punctuation">(</span>n <span class="token builtin">int</span><span class="token punctuation">,</span> c <span class="token keyword">chan</span> <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    x<span class="token punctuation">,</span> y <span class="token operator">:=</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span>
+    <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span> <span class="token comment">// 循环n次，每次向通道中发送fibonacci数列中一项数据，并计算下一项</span>
+        c <span class="token operator">&lt;-</span> x
+        x<span class="token punctuation">,</span> y <span class="token operator">=</span> y<span class="token punctuation">,</span> x <span class="token operator">+</span> y
+    <span class="token punctuation">}</span>
+    <span class="token function">close</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    c <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">chan</span> <span class="token builtin">int</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span> <span class="token comment">// 申明一个能缓冲10个整形数据的channel</span>
+    <span class="token keyword">go</span> <span class="token function">fibonacci</span><span class="token punctuation">(</span><span class="token function">cap</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">,</span> c<span class="token punctuation">)</span> <span class="token comment">// cap(c)：缓冲通道的长度</span>
+    <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token keyword">range</span> c <span class="token punctuation">{</span>		<span class="token comment">// 遍历通道数据</span>
+        fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 结果：</span>
+<span class="token number">1</span>
+<span class="token number">1</span>
+<span class="token number">2</span>
+<span class="token number">3</span>
+<span class="token number">5</span>
+<span class="token number">8</span>
+<span class="token number">13</span>
+<span class="token number">21</span>
+<span class="token number">34</span>
+<span class="token number">55</span>
+</code></pre></div><p><code>for i := range c</code>能够不断的读取channel里面的数据，直到该channel被显式的关闭。上面代码我们看到可以显式的关闭channel，生产者通过内置函数<code>close</code>关闭<code>channel</code>。关闭<code>channel</code>之后就无法再发送任何数据了，在消费方可以通过语法<code>v, ok := &lt;-ch</code>测试channel是否被关闭。如果ok返回false，那么说明channel已经没有任何数据并且已经被关闭。</p> <blockquote><p>注意：记住应该在生产者的地方关闭channel，而不是消费的地方去关闭它，这样容易引起panic
+另外记住一点的就是channel不像文件之类的，不需要经常去关闭，只有当你确实没有任何发送数据了，或者你想显式的结束range循环时。只有发送者需要关闭通道，接收者永远不会需要。</p></blockquote> <h3 id="_4、通道方向"><a href="#_4、通道方向" class="header-anchor">#</a> 4、通道方向</h3> <p>通道类型可以用注解来表示它只发送或者只接收：</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">var</span> sendOnly <span class="token keyword">chan</span><span class="token operator">&lt;-</span> <span class="token builtin">int</span> 	<span class="token comment">// 通道只能发送数据</span>
+<span class="token keyword">var</span> recvOnly <span class="token operator">&lt;-</span><span class="token keyword">chan</span> <span class="token builtin">int</span>		<span class="token comment">// 通道只能接收数据</span>
+</code></pre></div><p>只接收的通道（chan&lt;- T）无法关闭，因为关闭通道是发送者用来表示不再给通道发送值了，所以对只接收通道是没有意义的。通道创建的时候都是双向的，但也可以分配有方向的通道变量，就像以下代码：</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">var</span> c <span class="token operator">=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">chan</span> <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token comment">// 申明双向通道</span>
+<span class="token keyword">go</span> <span class="token function">send</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span>
+<span class="token keyword">go</span> <span class="token function">recv</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">send</span><span class="token punctuation">(</span>ch <span class="token keyword">chan</span><span class="token operator">&lt;-</span> <span class="token builtin">int</span><span class="token punctuation">)</span><span class="token punctuation">{</span>	<span class="token comment">// 函数参数为只能发送数据通道</span>
+	<span class="token keyword">for</span> <span class="token punctuation">{</span> ch <span class="token operator">&lt;-</span> <span class="token number">1</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">recv</span><span class="token punctuation">(</span>ch <span class="token operator">&lt;-</span><span class="token keyword">chan</span> <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>	<span class="token comment">// 函数参数为只能接收数据通道</span>
+	<span class="token keyword">for</span> <span class="token punctuation">{</span> <span class="token operator">&lt;-</span>ch <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="_5、-select"><a href="#_5、-select" class="header-anchor">#</a> 5、 select</h3> <p>从不同的并发执行的协程中获取值可以通过关键字<code>select</code>来完成，它和<code>switch</code>控制语句非常相似也被称作通信开关；它的表现像轮询机制；<code>select</code>监听进入通道的数据，也可以是用通道发送值的时候。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">select</span> <span class="token punctuation">{</span>
+<span class="token keyword">case</span> u<span class="token operator">:=</span> <span class="token operator">&lt;-</span> ch1<span class="token punctuation">:</span>
+        <span class="token operator">...</span>
+<span class="token keyword">case</span> v<span class="token operator">:=</span> <span class="token operator">&lt;-</span> ch2<span class="token punctuation">:</span>
+        <span class="token operator">...</span>
+        <span class="token operator">...</span>
+<span class="token keyword">default</span><span class="token punctuation">:</span>
+      <span class="token comment">// 当ch1、ch2阻塞的时候执行这里</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>``select<code>默认是阻塞的，只有当监听的通道中有发送或接收可以进行时才会运行，当多个通道都准备好的时候，select是随机的选择一个执行的。default</code> 语句是可选的，可以确保发送不被阻塞；在任何一个 case 中执行 <code>break</code> 或者 <code>return</code>，<code>select</code>就结束了。</p> <p>我们来再来看一下如何使用通道换一种方式实现一个<code>fibonacci</code> 函数：</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token string">&quot;fmt&quot;</span>
+
+<span class="token keyword">func</span> <span class="token function">fibonacci</span><span class="token punctuation">(</span>c<span class="token punctuation">,</span> quit <span class="token keyword">chan</span> <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    x<span class="token punctuation">,</span> y <span class="token operator">:=</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span>
+    <span class="token keyword">for</span> <span class="token punctuation">{</span>
+        <span class="token keyword">select</span> <span class="token punctuation">{</span>
+        <span class="token keyword">case</span> c <span class="token operator">&lt;-</span> x<span class="token punctuation">:</span>
+            x<span class="token punctuation">,</span> y <span class="token operator">=</span> y<span class="token punctuation">,</span> x <span class="token operator">+</span> y
+        <span class="token keyword">case</span> <span class="token operator">&lt;-</span>quit<span class="token punctuation">:</span>
+            fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;quit&quot;</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    c <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">chan</span> <span class="token builtin">int</span><span class="token punctuation">)</span>
+    quit <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">chan</span> <span class="token builtin">int</span><span class="token punctuation">)</span>
+    <span class="token keyword">go</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+            fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token operator">&lt;-</span>c<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+        quit <span class="token operator">&lt;-</span> <span class="token number">0</span>
+    <span class="token punctuation">}</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token function">fibonacci</span><span class="token punctuation">(</span>c<span class="token punctuation">,</span> quit<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span class="token comment">// 结果：</span>
+<span class="token number">1</span>
+<span class="token number">1</span>
+<span class="token number">2</span>
+<span class="token number">3</span>
+<span class="token number">5</span>
+<span class="token number">8</span>
+<span class="token number">13</span>
+<span class="token number">21</span>
+<span class="token number">34</span>
+<span class="token number">55</span>
+quit
+</code></pre></div><h3 id="_6、-超时"><a href="#_6、-超时" class="header-anchor">#</a> 6、 超时</h3> <p>有时候会出现<code>goroutine</code>阻塞的情况，那么我们如何避免整个程序进入阻塞的情况呢？我们可以利用<code>select</code>接合定时器（Timer）或者计时器（Ticker）来设置超时。</p> <p><code>time</code> 包中有一些有趣的功能可以和通道组合使用。其中就包含了计时器 <code>time.Ticker</code> 结构体，这个对象以指定的时间间隔重复的向通道 C 发送时间值。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// 计时器 time.Tick</span>
+<span class="token keyword">type</span> Ticker <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    C <span class="token operator">&lt;-</span><span class="token keyword">chan</span> Time <span class="token comment">// 计时向通道发送消息</span>
+    <span class="token operator">...</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 定时器</span>
+<span class="token keyword">func</span> <span class="token function">After</span><span class="token punctuation">(</span>d Duration<span class="token punctuation">)</span> <span class="token operator">&lt;-</span><span class="token keyword">chan</span> Time <span class="token comment">// 定时向通道发送消息</span>
+</code></pre></div><p>我们来看下面的例子：</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">&quot;fmt&quot;</span>
+	<span class="token string">&quot;time&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	tick <span class="token operator">:=</span> time<span class="token punctuation">.</span><span class="token function">Tick</span><span class="token punctuation">(</span><span class="token number">1e8</span><span class="token punctuation">)</span>
+	boom <span class="token operator">:=</span> time<span class="token punctuation">.</span><span class="token function">After</span><span class="token punctuation">(</span><span class="token number">5e8</span><span class="token punctuation">)</span>
+	<span class="token keyword">for</span> <span class="token punctuation">{</span>
+		<span class="token keyword">select</span> <span class="token punctuation">{</span>
+		<span class="token keyword">case</span> <span class="token operator">&lt;-</span>tick<span class="token punctuation">:</span>
+			fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;tick.&quot;</span><span class="token punctuation">)</span>
+		<span class="token keyword">case</span> <span class="token operator">&lt;-</span>boom<span class="token punctuation">:</span>
+			fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;BOOM!&quot;</span><span class="token punctuation">)</span>
+			<span class="token keyword">return</span>
+		<span class="token keyword">default</span><span class="token punctuation">:</span>
+			fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;    .&quot;</span><span class="token punctuation">)</span>
+			time<span class="token punctuation">.</span><span class="token function">Sleep</span><span class="token punctuation">(</span><span class="token number">5e7</span><span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment">// 结果：</span>
+    <span class="token punctuation">.</span>
+    <span class="token punctuation">.</span>
+    <span class="token punctuation">.</span>
+tick<span class="token punctuation">.</span>
+    <span class="token punctuation">.</span>
+tick<span class="token punctuation">.</span>
+    <span class="token punctuation">.</span>
+    <span class="token punctuation">.</span>
+tick<span class="token punctuation">.</span>
+    <span class="token punctuation">.</span>
+    <span class="token punctuation">.</span>
+tick<span class="token punctuation">.</span>
+    <span class="token punctuation">.</span>
+    <span class="token punctuation">.</span>
+BOOM<span class="token operator">!</span>
+</code></pre></div><h1 id="本章试练"><a href="#本章试练" class="header-anchor">#</a> 本章试练</h1> <ul><li>使用<code>channel</code>完成打印1000以内素数</li> <li><a href="https://tour.go-zh.org/concurrency/7" target="_blank" rel="noopener noreferrer">等价二叉查找树<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div> <footer class="page-edit"><!----> <!----></footer> <!----> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.eb766794.js" defer></script><script src="/assets/js/2.12a3889d.js" defer></script><script src="/assets/js/12.15fba913.js" defer></script>
+  </body>
+</html>
